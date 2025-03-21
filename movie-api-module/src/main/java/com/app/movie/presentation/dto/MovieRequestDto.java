@@ -1,5 +1,6 @@
 package com.app.movie.presentation.dto;
 
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieRequestDto {
 
+    @Max(10)
     private String title;
     private List<String> genres;
 
