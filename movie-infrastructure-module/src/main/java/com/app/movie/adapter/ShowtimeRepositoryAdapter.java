@@ -28,8 +28,12 @@ public class ShowtimeRepositoryAdapter implements ShowtimeRepository {
 
 
     @Override
-    public List<Showtime> findByReleaseDateLessThanEqual(LocalDate localDate) {
-        List<ShowtimeEntity> showtimeEntities = showtimeJpaRepository.findShowtime(localDate);
+    public List<Showtime> findShowtimesByDateAndTitleAndGenre(LocalDate localDate, String title, List<String> genres) {
+        List<ShowtimeEntity> showtimeEntities = showtimeJpaRepository
+                .findShowtimesByDateAndTitleAndGenre(
+                        localDate,
+                        title,
+                        genres);
         List<Showtime> showtimes = showtimeEntities.stream().map(ShowtimeMapper::convertToDomain).toList();
         return showtimes;
     }

@@ -1,11 +1,10 @@
 package com.app.movie.presentation;
 
 import com.app.movie.application.MovieService;
+import com.app.movie.presentation.dto.MovieRequestDto;
 import com.app.movie.presentation.dto.MovieResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class MovieRestController {
     }
 
     @GetMapping()
-    public List<MovieResponseDto> getMovies() {
-        return movieService.findAllMovies();
+    public List<MovieResponseDto> getMovies(@ModelAttribute MovieRequestDto movieRequestDto) {
+        return movieService.getAllMoviesBytitle(movieRequestDto);
     }
 }

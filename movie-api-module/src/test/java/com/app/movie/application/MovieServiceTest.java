@@ -1,6 +1,7 @@
 package com.app.movie.application;
 
 
+import com.app.movie.presentation.dto.MovieRequestDto;
 import com.app.movie.presentation.dto.MovieResponseDto;
 import com.app.movie.presentation.dto.TheaterShowtime;
 import com.app.movie.repository.ShowtimeRepository;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,12 +72,14 @@ class MovieServiceTest {
         List<Showtime> showtimes = Arrays.asList(showtime1, showtime2);
         LocalDate today = LocalDate.now();
 
-        // showtimeRepository가 findByReleaseDateLessThanEqual(today)를 호출하면 위 데이터를 반환하도록 설정
-        when(showtimeRepository.findByReleaseDateLessThanEqual(any(LocalDate.class)))
+
+        when(showtimeRepository.findShowtimesByDateAndTitleAndGenre(any(LocalDate.class), eq(null), eq(null)))
                 .thenReturn(showtimes);
 
         // when: 실제 서비스 메서드 호출
-        List<MovieResponseDto> result = movieService.findAllMovies();
+        MovieRequestDto movieRequestDto = new MovieRequestDto();
+
+        List<MovieResponseDto> result = movieService.getAllMoviesBytitle(movieRequestDto);
         System.out.println("===========");
         result.get(0).getTheaterShowtimes().forEach(showtime-> {
             System.out.println(showtime.getStartTime());

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ShowtimeRepository{
 
-    List<Showtime> findByReleaseDateLessThanEqual(LocalDate localDate);
+    List<Showtime> findShowtimesByDateAndTitleAndGenre(LocalDate localDate, String title, List<String> genres);
 
 }

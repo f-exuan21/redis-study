@@ -3,6 +3,7 @@ package com.app.movie.application;
 import com.app.movie.model.Movie;
 import com.app.movie.model.Showtime;
 import com.app.movie.model.Theater;
+import com.app.movie.presentation.dto.MovieRequestDto;
 import com.app.movie.presentation.dto.MovieResponseDto;
 import com.app.movie.presentation.dto.TheaterShowtime;
 import com.app.movie.repository.MovieRepository;
@@ -29,9 +30,13 @@ public class MovieService {
     }
 
 
-    public List<MovieResponseDto> findAllMovies() {
+    public List<MovieResponseDto> getAllMoviesBytitle(MovieRequestDto movieRequestDto) {
         LocalDate today = LocalDate.now();
-        List<Showtime> showtimes = showtimeRepository.findByReleaseDateLessThanEqual(today);
+        List<Showtime> showtimes = showtimeRepository.findShowtimesByDateAndTitleAndGenre(
+                today,
+                movieRequestDto.getTitle(),
+                movieRequestDto.getGenres()
+        );
 
         List<MovieResponseDto> movieResponseDtoList = showtimes.stream()
                 .collect(Collectors.groupingBy(Showtime::getMovie))

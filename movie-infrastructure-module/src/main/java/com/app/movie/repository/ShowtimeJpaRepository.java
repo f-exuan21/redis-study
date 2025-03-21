@@ -17,6 +17,10 @@ public interface ShowtimeJpaRepository extends JpaRepository<ShowtimeEntity, Lon
             "join fetch s.theater " +
             "left join fetch s.movie " +
             "left join fetch s.movie.genre " +
-            "WHERE s.movie.releaseDate <= :today")
-    List<ShowtimeEntity> findShowtime(@Param("today") LocalDate today);
+            "WHERE s.movie.releaseDate <= :today " +
+            "AND (:title IS NULL OR s.movie.title LIKE CONCAT('%', :title, '%'))" +
+            "AND s.movie.genre.name IN :genres")
+    List<ShowtimeEntity> findShowtimesByDateAndTitleAndGenre(@Param("today") LocalDate today,
+                                                             @Param("title") String title,
+                                                             @Param("genres") List<String> genres);
 }
