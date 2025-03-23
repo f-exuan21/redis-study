@@ -1,5 +1,6 @@
 package com.app.movie.application;
 
+import com.app.movie.aop.DistributedLock;
 import com.app.movie.model.Movie;
 import com.app.movie.model.Showtime;
 import com.app.movie.model.Theater;
@@ -8,6 +9,7 @@ import com.app.movie.presentation.dto.MovieResponseDto;
 import com.app.movie.presentation.dto.TheaterShowtime;
 import com.app.movie.repository.MovieRepository;
 import com.app.movie.repository.ShowtimeRepository;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,9 @@ import java.util.stream.Collectors;
 @Service
 public class MovieService {
 
-    MovieRepository movieRepository;
-    ShowtimeRepository showtimeRepository;
+    private final MovieRepository movieRepository;
+    private final ShowtimeRepository showtimeRepository;
+
 
     @Autowired
     public MovieService(MovieRepository movieRepository, ShowtimeRepository showtimeRepository) {
@@ -31,8 +34,13 @@ public class MovieService {
     }
 
 
-    @Cacheable(value = "userCache", key = "#movieRequestDto", sync = true)
-    public List<MovieResponseDto> getAllMoviesBytitle(MovieRequestDto movieRequestDto) {
+    @Cacheable(value = "movieCache", key = "#movieRequestDto", sync = true)
+    public List<MovieResponseDto> getAllMoviesByTitle(MovieRequestDto movieRequestDto) {
+        return loadAllMovies(movieRequestDto);
+    }
+
+    @DistributedLock(key = "movieLock")
+    public List<MovieResponseDto> loadAllMovies(MovieRequestDto movieRequestDto) {
         LocalDate today = LocalDate.now();
         List<Showtime> showtimes = showtimeRepository.findShowtimesByDateAndTitleAndGenre(
                 today,

@@ -61,7 +61,7 @@ export default function peakTest() {
     const drama = encodeURIComponent("\ub4dc\ub77c\ub9c8"); // 드라마
     const mystery = encodeURIComponent("\ucd94\ub9ac"); // 추리
 
-    const url = `http://host.docker.internal:8080/movie?title=SYNURXZH&genres=${drama}&genres=${mystery}`;
+    const url = `http://host.docker.internal:8080/movie?title=SY&genres=${drama}&genres=${mystery}`;
 
     const response = http.get(url, requestOptions);
     check(response, { "status is 200": (r) => r.status === 200 });

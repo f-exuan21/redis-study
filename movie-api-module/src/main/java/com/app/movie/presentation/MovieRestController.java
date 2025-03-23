@@ -22,6 +22,6 @@ public class MovieRestController {
 
     @GetMapping()
     public List<MovieResponseDto> getMovies(@Valid @ModelAttribute MovieRequestDto movieRequestDto) {
-        return movieService.getAllMoviesBytitle(movieRequestDto);
+        return movieService.getAllMoviesByTitle(movieRequestDto);
     }
 }
