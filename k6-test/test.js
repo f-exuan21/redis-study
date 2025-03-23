@@ -40,7 +40,7 @@ export const options = {
             executor: 'constant-arrival-rate',
             rate: peakRPS,         // 초당 요청 수
             timeUnit: '1s',        // rate 기준 단위
-            duration: '30s',       // 테스트 유지 시간(예: 30초)
+            duration: '300s',       // 테스트 유지 시간(예: 30초)
             preAllocatedVUs: 500,  // 기본 할당 VU 수 (요청 속도에 맞춰 충분히 할당)
             maxVUs: 1500,          // 최대 동시 VU
         },
@@ -51,6 +51,7 @@ export const options = {
     },
 };
 
+
 export default function peakTest() {
     const requestOptions = {
         headers: {
@@ -58,10 +59,32 @@ export default function peakTest() {
         },
     };
 
-    const drama = encodeURIComponent("\ub4dc\ub77c\ub9c8"); // 드라마
-    const mystery = encodeURIComponent("\ucd94\ub9ac"); // 추리
+    const titles = ["SY", "AB", "CD", "EF", "GH"];
+    const genres = [
+        encodeURIComponent("드라마"),
+        encodeURIComponent("추리"),
+        encodeURIComponent("코미디"),
+        encodeURIComponent("액션"),
+        encodeURIComponent("SF")
+    ];
 
-    const url = `http://host.docker.internal:8080/movie?title=SY&genres=${drama}&genres=${mystery}`;
+    const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+
+    const randomGenres = [];
+
+    const firstIndex = Math.floor(Math.random() * genres.length);
+    randomGenres.push(genres[firstIndex]);
+
+    let secondIndex = Math.floor(Math.random() * genres.length);
+    while (secondIndex === firstIndex) {
+        secondIndex = Math.floor(Math.random() * genres.length);
+    }
+    randomGenres.push(genres[secondIndex]);
+
+    let url = `http://host.docker.internal:8080/movie?title=${randomTitle}`;
+    randomGenres.forEach(g => {
+        url += `&genres=${g}`;
+    });
 
     const response = http.get(url, requestOptions);
     check(response, { "status is 200": (r) => r.status === 200 });
