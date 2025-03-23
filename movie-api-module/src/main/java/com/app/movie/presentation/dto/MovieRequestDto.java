@@ -34,4 +34,11 @@ public class MovieRequestDto {
         return Objects.hash(title, genres);
     }
 
+    @Override
+    public String toString() {
+        return "MovieRequestDto{" +
+                "title='" + title + '\'' +
+                ", genres=" + genres +
+                '}';
+    }
 }
