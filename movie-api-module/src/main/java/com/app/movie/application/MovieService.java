@@ -9,6 +9,7 @@ import com.app.movie.presentation.dto.TheaterShowtime;
 import com.app.movie.repository.MovieRepository;
 import com.app.movie.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public class MovieService {
     }
 
 
+    @Cacheable(value = "userCache", key = "#movieRequestDto", sync = true)
     public List<MovieResponseDto> getAllMoviesBytitle(MovieRequestDto movieRequestDto) {
         LocalDate today = LocalDate.now();
         List<Showtime> showtimes = showtimeRepository.findShowtimesByDateAndTitleAndGenre(

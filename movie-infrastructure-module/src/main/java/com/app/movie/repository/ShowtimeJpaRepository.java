@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public interface ShowtimeJpaRepository extends JpaRepository<ShowtimeEntity, Long> {
 
@@ -22,5 +23,5 @@ public interface ShowtimeJpaRepository extends JpaRepository<ShowtimeEntity, Lon
             "AND s.movie.genre.name IN :genres")
     List<ShowtimeEntity> findShowtimesByDateAndTitleAndGenre(@Param("today") LocalDate today,
                                                              @Param("title") String title,
-                                                             @Param("genres") List<String> genres);
+                                                             @Param("genres") Set<String> genres);
 }
