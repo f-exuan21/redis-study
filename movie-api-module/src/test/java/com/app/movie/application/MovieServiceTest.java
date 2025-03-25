@@ -79,7 +79,7 @@ class MovieServiceTest {
         // when: 실제 서비스 메서드 호출
         MovieRequestDto movieRequestDto = new MovieRequestDto();
 
-        List<MovieResponseDto> result = movieService.getAllMoviesByTitle(movieRequestDto);
+        List<MovieResponseDto> result = movieService.getAllMovies(movieRequestDto);
         System.out.println("===========");
         result.get(0).getTheaterShowtimes().forEach(showtime-> {
             System.out.println(showtime.getStartTime());

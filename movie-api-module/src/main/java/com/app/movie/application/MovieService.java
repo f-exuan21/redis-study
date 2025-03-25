@@ -35,7 +35,7 @@ public class MovieService {
 
 
     @Cacheable(value = "movieCache", key = "#movieRequestDto", sync = true)
-    public List<MovieResponseDto> getAllMoviesByTitle(MovieRequestDto movieRequestDto) {
+    public List<MovieResponseDto> getAllMovies(MovieRequestDto movieRequestDto) {
         return loadAllMovies(movieRequestDto);
     }
 
@@ -44,8 +44,8 @@ public class MovieService {
         LocalDate today = LocalDate.now();
         List<Showtime> showtimes = showtimeRepository.findShowtimesByDateAndTitleAndGenre(
                 today,
-                movieRequestDto.getTitle(),
-                movieRequestDto.getGenres()
+                movieRequestDto.title(),
+                movieRequestDto.genres()
         );
 
         List<MovieResponseDto> movieResponseDtoList = showtimes.stream()

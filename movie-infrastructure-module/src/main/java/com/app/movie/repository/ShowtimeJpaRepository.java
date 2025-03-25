@@ -15,7 +15,7 @@ public interface ShowtimeJpaRepository extends JpaRepository<ShowtimeEntity, Lon
     List<ShowtimeEntity> findByMovie_ReleaseDateLessThanEqual(LocalDate date);
 
     @Query("SELECT s FROM ShowtimeEntity s " +
-            "join fetch s.theater " +
+            "left join fetch s.theater " +
             "left join fetch s.movie " +
             "left join fetch s.movie.genre " +
             "WHERE s.movie.releaseDate <= :today " +
