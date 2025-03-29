@@ -24,7 +24,8 @@ public class MovieEntity {
     private String thumbnailURL;
     private LocalDate releaseDate;
     private int duration;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id")
     private GenreEntity genre;
 

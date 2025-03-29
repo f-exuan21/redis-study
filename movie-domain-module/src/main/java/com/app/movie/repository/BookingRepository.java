@@ -6,4 +6,6 @@ public interface BookingRepository {
 
     void save(Booking booking);
 
+    boolean isExists(Long showtimeId, Long seatId);
+
 }

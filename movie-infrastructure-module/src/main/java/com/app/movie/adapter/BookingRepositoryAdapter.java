@@ -24,7 +24,11 @@ public class BookingRepositoryAdapter implements BookingRepository {
     @Override
     public void save(Booking booking) {
         BookingEntity bookingEntity = BookingEntity.of(booking);
-        System.out.println(bookingEntity);
         bookingJpaRepository.save(bookingEntity);
+    }
+
+    @Override
+    public boolean isExists(Long showtimeId, Long seatId) {
+        return bookingJpaRepository.existsByShowtimeIdAndSeatId(showtimeId, seatId);
     }
 }

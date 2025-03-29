@@ -4,6 +4,7 @@ import com.app.movie.model.Booking;
 import com.app.movie.model.Movie;
 import com.app.movie.model.Seat;
 import com.app.movie.model.Showtime;
+import com.app.movie.presentation.DuplicateBookingException;
 import com.app.movie.presentation.SeatNotFoundException;
 import com.app.movie.presentation.ShowtimeNotFoundException;
 import com.app.movie.presentation.dto.BookingRequestDto;
@@ -20,28 +21,39 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final ShowtimeRepository showtimeRepository;
     private final SeatRepository seatRepository;
+    private final MessageSender messageSender;
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository, ShowtimeRepository showtimeRepository, SeatRepository seatRepository) {
+    public BookingService(BookingRepository bookingRepository, ShowtimeRepository showtimeRepository, SeatRepository seatRepository, MessageSender messageSender) {
         this.bookingRepository = bookingRepository;
         this.showtimeRepository = showtimeRepository;
         this.seatRepository = seatRepository;
+        this.messageSender = messageSender;
     }
 
     @Transactional
-    public void bookShowtime(BookingRequestDto bookingRequestDto) {
+    public void bookShowtime(BookingRequestDto bookingRequestDto){
+
+        Long showtimeId = bookingRequestDto.showtimeId();
+        Long seatId = bookingRequestDto.seatId();
 
         Showtime showtime = showtimeRepository.findByShowtimeId(bookingRequestDto.showtimeId())
-                .orElseThrow(() -> new ShowtimeNotFoundException(bookingRequestDto.showtimeId()));
+                .orElseThrow(() -> new ShowtimeNotFoundException(showtimeId));
 
         Seat seat = seatRepository.findBySeatId(bookingRequestDto.seatId())
-                .orElseThrow(() -> new SeatNotFoundException(bookingRequestDto.seatId()));
+                .orElseThrow(() -> new SeatNotFoundException(seatId));
+
+        if(bookingRepository.isExists(showtimeId, seatId)) {
+            throw new DuplicateBookingException();
+        }
 
         Booking booking = new Booking();
         booking.setShowtime(showtime);
         booking.setSeat(seat);
 
         bookingRepository.save(booking);
+
+        messageSender.send();
 
     }
 

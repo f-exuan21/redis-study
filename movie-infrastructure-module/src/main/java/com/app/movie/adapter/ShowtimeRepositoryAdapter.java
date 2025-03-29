@@ -43,7 +43,7 @@ public class ShowtimeRepositoryAdapter implements ShowtimeRepository {
     @Override
     public Optional<Showtime> findByShowtimeId(Long id) {
         Optional<Showtime> showtime = showtimeJpaRepository.findById(id)
-                .map(ShowtimeMapper::convertToDomain);
+                .map(ShowtimeMapper::convertToDomainWithoutTheaterAndMovie);
 
         return showtime;
     }

@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleSeatNotFoundException(SeatNotFoundException e) {
         return new ResponseEntity<>("해당 Seat 데이터는 존재하지 않음. Seat ID : " + e.getSeatId(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DuplicateBookingException.class)
+    public ResponseEntity<String> handleDuplicateBookingException(DuplicateBookingException e) {
+        return new ResponseEntity<>("이미 예약된 영화 및 좌석임.", HttpStatus.BAD_REQUEST);
+    }
 }

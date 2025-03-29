@@ -25,6 +25,14 @@ public class ShowtimeMapper {
         );
     }
 
+    public static Showtime convertToDomainWithoutTheaterAndMovie(ShowtimeEntity showtimeEntity) {
+        return new Showtime(showtimeEntity.getId(),
+                null,
+                null,
+                showtimeEntity.getStartTime(),
+                showtimeEntity.getEndTime());
+    }
+
     // 변환 메서드: Domain -> Entity
     public static ShowtimeEntity convertToEntity(Showtime showtime) {
         LocalDateTime today = LocalDateTime.now();
