@@ -26,4 +26,12 @@ public class SeatEntity {
     private String updatedBy;
     private LocalDateTime updatedAt;
 
+    public SeatEntity(Long id) {
+        this.id = id;
+    }
+
+    public SeatEntity(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

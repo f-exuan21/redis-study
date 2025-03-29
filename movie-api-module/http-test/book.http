@@ -1,0 +1,8 @@
+## 영화 예매
+POST http://localhost:8080/book
+Content-Type: application/json
+
+{
+  "showtimeId": 1,
+  "seatId": 3
+}

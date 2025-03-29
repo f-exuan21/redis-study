@@ -22,10 +22,10 @@ public class ShowtimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theater_id")
     private TheaterEntity theater;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private MovieEntity movie;
     private LocalTime startTime;
@@ -35,6 +35,10 @@ public class ShowtimeEntity {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+
+    public ShowtimeEntity(Long id) {
+        this.id = id;
+    }
 
     public MovieEntity getMovie() {
         return movie;
@@ -51,5 +55,7 @@ public class ShowtimeEntity {
     public void setTheater(TheaterEntity theater) {
         this.theater = theater;
     }
+
+
 
 }

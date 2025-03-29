@@ -15,4 +15,8 @@ public class Booking {
     private Showtime showtime;
     private Seat seat;
 
+    public Booking(Showtime showtime, Seat seat) {
+        this.showtime = showtime;
+        this.seat = seat;
+    }
 }

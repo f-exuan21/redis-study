@@ -18,4 +18,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorMessage.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ShowtimeNotFoundException.class)
+    public ResponseEntity<String> handleShowtimeNotFoundException(ShowtimeNotFoundException e) {
+        return new ResponseEntity<>("해당 Showtime 데이터는 존재하지 않음. Showtime ID : " + e.getShowtimeId(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SeatNotFoundException.class)
+    public ResponseEntity<String> handleSeatNotFoundException(SeatNotFoundException e) {
+        return new ResponseEntity<>("해당 Seat 데이터는 존재하지 않음. Seat ID : " + e.getSeatId(), HttpStatus.BAD_REQUEST);
+    }
 }

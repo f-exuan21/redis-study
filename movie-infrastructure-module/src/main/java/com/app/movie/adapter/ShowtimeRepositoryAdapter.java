@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -37,6 +38,14 @@ public class ShowtimeRepositoryAdapter implements ShowtimeRepository {
                         genres);
         List<Showtime> showtimes = showtimeEntities.stream().map(ShowtimeMapper::convertToDomain).toList();
         return showtimes;
+    }
+
+    @Override
+    public Optional<Showtime> findByShowtimeId(Long id) {
+        Optional<Showtime> showtime = showtimeJpaRepository.findById(id)
+                .map(ShowtimeMapper::convertToDomain);
+
+        return showtime;
     }
 
 }
