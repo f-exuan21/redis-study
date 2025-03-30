@@ -37,7 +37,6 @@ public class MovieService {
         return loadAllMovies(movieRequestDto);
     }
 
-//    @DistributedLock(key = "movieLock")
     public List<MovieResponseDto> loadAllMovies(MovieRequestDto movieRequestDto) {
         LocalDate today = LocalDate.now();
         List<Showtime> showtimes = showtimeRepository.findShowtimesByDateAndTitleAndGenre(

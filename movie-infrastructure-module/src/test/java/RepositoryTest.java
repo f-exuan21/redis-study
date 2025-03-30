@@ -1,6 +1,7 @@
 import com.app.movie.MovieApplication;
 import com.app.movie.entity.BookingEntity;
 import com.app.movie.entity.SeatEntity;
+import com.app.movie.entity.ShowtimeEntity;
 import com.app.movie.repository.BookingJpaRepository;
 import com.app.movie.repository.BookingRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(classes = MovieApplication.class)
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RepositoryTest {
 
     @Autowired
@@ -23,6 +24,8 @@ public class RepositoryTest {
     @Transactional
     public Long createTestBooking() {
         BookingEntity booking = new BookingEntity();
+        booking.setSeat(new SeatEntity(10L));
+        booking.setShowtime(new ShowtimeEntity(1L));
         booking.setUpdatedBy("USER");
         return bookingRepository.saveAndFlush(booking).getId();
     }
@@ -42,16 +45,16 @@ public class RepositoryTest {
     @Test
     void 낙관락테스트() {
 
-        final Long testBookingId = createTestBooking();
+//        final Long testBookingId = createTestBooking();
 
-        BookingEntity bookingEntity1 = fetchBookingInNewTransaction(testBookingId);
-        BookingEntity bookingEntity2 = fetchBookingInNewTransaction(testBookingId);
+        BookingEntity bookingEntity1 = fetchBookingInNewTransaction(17031L);
+        BookingEntity bookingEntity2 = fetchBookingInNewTransaction(17031L);
 
 
-        updateBookingInNewTransaction(bookingEntity1, "테스트5");
+        updateBookingInNewTransaction(bookingEntity1, "테스트1");
 
         Assertions.assertThrows(ObjectOptimisticLockingFailureException.class, () -> {
-            updateBookingInNewTransaction(bookingEntity2, "테스트6");
+            updateBookingInNewTransaction(bookingEntity2, "테스트2");
         });
     }
 

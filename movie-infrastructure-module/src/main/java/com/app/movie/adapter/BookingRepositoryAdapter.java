@@ -31,4 +31,9 @@ public class BookingRepositoryAdapter implements BookingRepository {
     public boolean isExists(Long showtimeId, Long seatId) {
         return bookingJpaRepository.existsByShowtimeIdAndSeatId(showtimeId, seatId);
     }
+
+    @Override
+    public long countByShowtimeIdAndSeatId(Long showtimeId, Long seatId) {
+        return bookingJpaRepository.countByShowtimeIdAndSeatId(showtimeId, seatId);
+    }
 }

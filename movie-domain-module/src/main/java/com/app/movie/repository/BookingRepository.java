@@ -8,4 +8,6 @@ public interface BookingRepository {
 
     boolean isExists(Long showtimeId, Long seatId);
 
+    long countByShowtimeIdAndSeatId(Long showtimeId, Long seatId);
+
 }

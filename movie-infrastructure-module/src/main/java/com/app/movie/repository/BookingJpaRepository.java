@@ -9,4 +9,5 @@ public interface BookingJpaRepository extends JpaRepository<BookingEntity, Long>
 
     boolean existsByShowtimeIdAndSeatId(Long showtimeId, Long seatId);
 
+    long countByShowtimeIdAndSeatId(Long showtimeId, Long seatId);
 }
