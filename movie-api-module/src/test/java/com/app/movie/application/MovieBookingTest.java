@@ -1,6 +1,7 @@
 package com.app.movie.application;
 
 
+import com.app.movie.model.Seat;
 import com.app.movie.presentation.BookingRestController;
 import com.app.movie.presentation.DuplicateBookingException;
 import com.app.movie.presentation.dto.BookingRequestDto;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

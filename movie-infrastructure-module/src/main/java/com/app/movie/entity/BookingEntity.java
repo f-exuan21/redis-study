@@ -35,6 +35,9 @@ public class BookingEntity {
     private String updatedBy;
     private LocalDateTime updatedAt;
 
+    @Version
+    private Long version;
+
     public SeatEntity getSeat() {
         return seat;
     }
