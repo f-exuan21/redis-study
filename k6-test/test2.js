@@ -19,7 +19,7 @@ const N = __ENV.DAU ? parseInt(__ENV.DAU) : 100000;
 // === 2) Throughput 계산 ===
 const dailyConnections = 2 * N;           // 1일 총 접속 수 (2N)
 const avgRPS = dailyConnections / 86400;  // X = 2N / 86400
-const peakRPS = avgRPS * 10;             // 10X
+const peakRPS = Math.floor(avgRPS * 10);             // 10X
 
 // === 3) 테스트 시나리오: 피크 RPS(10X)를 일정 시간 동안 유지 ===
 //
@@ -40,8 +40,8 @@ export const options = {
             executor: 'constant-arrival-rate',
             rate: peakRPS,         // 초당 요청 수
             timeUnit: '1s',        // rate 기준 단위
-            duration: '30s',       // 테스트 유지 시간(예: 30초)
-            preAllocatedVUs: 300,  // 기본 할당 VU 수 (요청 속도에 맞춰 충분히 할당)
+            duration: '300s',       // 테스트 유지 시간(예: 30초)
+            preAllocatedVUs: 500,  // 기본 할당 VU 수 (요청 속도에 맞춰 충분히 할당)
             maxVUs: 1000,          // 최대 동시 VU
         },
     },
@@ -52,17 +52,25 @@ export const options = {
 };
 
 export default function movies() {
-    const requestOptions = {
-        headers: {
-            "Content-Type": "application/json",
-        },
+
+    const randomSeat = Math.floor(Math.random() * 50) + 1;
+    const randomShowtime = Math.floor(Math.random() * 500) + 1;
+
+    const payload = JSON.stringify({
+        seatId: randomSeat,
+        showtimeId: randomShowtime
+    });
+
+    const headers = {
+        'Content-Type': 'application/json',
     };
 
-    const drama = encodeURIComponent("드라마");
-    const mystery = encodeURIComponent("추리");
+    const url = `http://host.docker.internal:8080/book`;
 
-    const url = `http://host.docker.internal:8080/movie?title=MOVIE&genres=${drama}&genres=${mystery}`;
+    const response = http.post(url, payload, { headers });
 
-    const response = http.get(url, requestOptions);
-    check(response, { "status is 200": (r) => r.status === 200 });
+    check(response, {
+        "status is 200": (r) => r.status === 200,
+        "중복 예외 메시지 포함": (r) => r.status === 400 && r.body.includes('이미 예약된 영화 및 좌석임.'),
+    });
 }

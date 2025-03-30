@@ -45,7 +45,7 @@ services:
       - "6565:6565"
     volumes:
       - ./k6-test:/scripts
-    command: run /scripts/test.js --out influxdb=http://influxdb:8086/k6
+    command: run /scripts/test2.js --out influxdb=http://influxdb:8086/k6
   redis:
     image: "redis:latest"
     container_name: "redis-service"
