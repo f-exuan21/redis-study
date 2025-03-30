@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicateBookingException(DuplicateBookingException e) {
         return new ResponseEntity<>("이미 예약된 영화 및 좌석임.", HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidSeatSelectionException.class)
+    public ResponseEntity<String> handleInvalidSeatSelectionException(InvalidSeatSelectionException e) {
+        return new ResponseEntity<>("좌석은 연속적이고 동일 라인 내에 있어야 합니다.", HttpStatus.BAD_REQUEST);
+    }
 }

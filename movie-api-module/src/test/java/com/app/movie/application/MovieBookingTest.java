@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,7 +40,8 @@ class MovieBookingTest {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
         CountDownLatch latch = new CountDownLatch(threadCount);
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, 1L);
+        List<Long> ids = Arrays.asList(1L, 2L, 3L, 4L, 5L);
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, ids);
 
         // 예외 카운트용
         AtomicInteger successCount = new AtomicInteger(0);

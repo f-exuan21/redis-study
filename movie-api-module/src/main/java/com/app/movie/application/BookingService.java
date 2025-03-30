@@ -1,10 +1,10 @@
 package com.app.movie.application;
 
 import com.app.movie.model.Booking;
-import com.app.movie.model.Movie;
 import com.app.movie.model.Seat;
 import com.app.movie.model.Showtime;
 import com.app.movie.presentation.DuplicateBookingException;
+import com.app.movie.presentation.InvalidSeatSelectionException;
 import com.app.movie.presentation.SeatNotFoundException;
 import com.app.movie.presentation.ShowtimeNotFoundException;
 import com.app.movie.presentation.dto.BookingRequestDto;
@@ -14,6 +14,9 @@ import com.app.movie.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookingService {
@@ -34,24 +37,34 @@ public class BookingService {
     @Transactional
     public void bookShowtime(BookingRequestDto bookingRequestDto){
 
+        if(!bookingRequestDto.isValidSeats()) {
+            throw new InvalidSeatSelectionException();
+        }
+
         Long showtimeId = bookingRequestDto.showtimeId();
-        Long seatId = bookingRequestDto.seatId();
+        List<Long> seatIds = bookingRequestDto.seatIds();
 
         Showtime showtime = showtimeRepository.findByShowtimeId(bookingRequestDto.showtimeId())
                 .orElseThrow(() -> new ShowtimeNotFoundException(showtimeId));
 
-        Seat seat = seatRepository.findBySeatId(bookingRequestDto.seatId())
-                .orElseThrow(() -> new SeatNotFoundException(seatId));
 
-        if(bookingRepository.isExists(showtimeId, seatId)) {
-            throw new DuplicateBookingException();
-        }
+        seatIds.forEach(seatId -> {
 
-        Booking booking = new Booking();
-        booking.setShowtime(showtime);
-        booking.setSeat(seat);
+            Seat seat = seatRepository.findBySeatId(seatId)
+                    .orElseThrow(() -> new SeatNotFoundException(seatId));
 
-        bookingRepository.save(booking);
+            if(bookingRepository.isExists(showtimeId, seat.getId())) {
+                throw new DuplicateBookingException();
+            }
+
+            Booking booking = new Booking();
+            booking.setShowtime(showtime);
+            booking.setSeat(seat);
+
+            bookingRepository.save(booking);
+
+        });
+
 
         messageSender.send();
 
