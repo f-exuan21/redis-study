@@ -19,7 +19,7 @@ public class BookingRestController {
 
     @PostMapping("/book")
     public ResponseEntity<Void> bookMovie(@RequestBody BookingRequestDto bookingRequestDto) {
-        bookingService.bookShowtime(bookingRequestDto);
+        bookingService.bookShowtimeAndSendFcm(bookingRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

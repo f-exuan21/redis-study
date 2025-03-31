@@ -40,7 +40,7 @@ public class BookingConcurrencyTest {
             executor.execute(() -> {
                 try {
                     BookingRequestDto bookingRequestDto = new BookingRequestDto(testShowtimeId, testSeatId);
-                    bookingService.bookShowtime(bookingRequestDto);
+                    bookingService.bookShowtimeAndSendFcm(bookingRequestDto);
                 } catch (Exception e) {
                     System.out.println("예외 발생: " + e.getMessage());
                 } finally {

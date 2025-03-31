@@ -23,48 +23,21 @@ import java.util.List;
 @Service
 public class BookingService {
 
-    private final BookingLockService bookingLockService;
-    private final ShowtimeRepository showtimeRepository;
-    private final SeatRepository seatRepository;
+
     private final MessageSender messageSender;
+    private final BookingTransactionalService bookingTransactionalService;
 
     @Autowired
-    public BookingService(BookingLockService bookingLockService, ShowtimeRepository showtimeRepository, SeatRepository seatRepository, MessageSender messageSender) {
-        this.bookingLockService = bookingLockService;
-        this.showtimeRepository = showtimeRepository;
-        this.seatRepository = seatRepository;
+    public BookingService(
+                          MessageSender messageSender,
+                          BookingTransactionalService bookingTransactionalService) {
         this.messageSender = messageSender;
+        this.bookingTransactionalService = bookingTransactionalService;
     }
 
-
-    @Transactional
-    public void bookShowtime(BookingRequestDto bookingRequestDto){
-
-        if(!bookingRequestDto.isValidSeats()) {
-            throw new InvalidSeatSelectionException();
-        }
-
-        Long showtimeId = bookingRequestDto.showtimeId();
-        List<Long> seatIds = bookingRequestDto.seatIds();
-
-        Showtime foundShowtime = showtimeRepository.findByShowtimeId(bookingRequestDto.showtimeId())
-                .orElseThrow(() -> new ShowtimeNotFoundException(showtimeId));
-
-
-        seatIds.forEach(seatId -> {
-            Seat foundSeat = seatRepository.findBySeatId(seatId)
-                    .orElseThrow(() -> new SeatNotFoundException(seatId));
-//            bookingLockService.saveShowtime(foundShowtime, foundSeat);
-
-        });
-
-        bookingLockService.saveShowtimeWithMultiLock(showtimeId, seatIds);
-
-
+    public void bookShowtimeAndSendFcm(BookingRequestDto bookingRequestDto) {
+        bookingTransactionalService.bookShowtime(bookingRequestDto);
         messageSender.send();
-
     }
-
-
 
 }

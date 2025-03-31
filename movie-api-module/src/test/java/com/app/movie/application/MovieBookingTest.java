@@ -52,7 +52,7 @@ class MovieBookingTest {
         IntStream.range(0, threadCount).forEach(i -> {
             executorService.submit(() -> {
                 try {
-                    bookingService.bookShowtime(bookingRequestDto);
+                    bookingService.bookShowtimeAndSendFcm(bookingRequestDto);
                     successCount.incrementAndGet();
                     System.out.println("예약 성공");
                 } catch (DuplicateBookingException e) {
