@@ -19,4 +19,16 @@ public class Booking {
         this.showtime = showtime;
         this.seat = seat;
     }
+
+    public static Booking book(Long showtimeId, Long seatId) {
+        Showtime showtime = new Showtime();
+        showtime.setId(showtimeId);
+
+        Seat seat = new Seat();
+        seat.setId(seatId);
+
+        Booking booking = new Booking(showtime, seat);
+        return booking;
+    }
+
 }

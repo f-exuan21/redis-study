@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MovieBookingTest {
 
@@ -37,7 +37,7 @@ class MovieBookingTest {
     private BookingService bookingService;
 
     @Test
-    public void 에약하기() throws InterruptedException {
+    public void 예약하기() throws InterruptedException {
         int threadCount = 10;
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 

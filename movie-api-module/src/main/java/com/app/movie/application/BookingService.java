@@ -12,6 +12,7 @@ import com.app.movie.presentation.dto.BookingRequestDto;
 import com.app.movie.repository.BookingRepository;
 import com.app.movie.repository.SeatRepository;
 import com.app.movie.repository.ShowtimeRepository;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,10 +54,11 @@ public class BookingService {
         seatIds.forEach(seatId -> {
             Seat foundSeat = seatRepository.findBySeatId(seatId)
                     .orElseThrow(() -> new SeatNotFoundException(seatId));
-
-            bookingLockService.saveShowtime(foundShowtime, foundSeat);
+//            bookingLockService.saveShowtime(foundShowtime, foundSeat);
 
         });
+
+        bookingLockService.saveShowtimeWithMultiLock(showtimeId, seatIds);
 
 
         messageSender.send();

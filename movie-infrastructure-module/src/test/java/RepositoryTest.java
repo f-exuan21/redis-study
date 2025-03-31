@@ -45,10 +45,10 @@ public class RepositoryTest {
     @Test
     void 낙관락테스트() {
 
-//        final Long testBookingId = createTestBooking();
+        final Long testBookingId = createTestBooking();
 
-        BookingEntity bookingEntity1 = fetchBookingInNewTransaction(17031L);
-        BookingEntity bookingEntity2 = fetchBookingInNewTransaction(17031L);
+        BookingEntity bookingEntity1 = fetchBookingInNewTransaction(testBookingId);
+        BookingEntity bookingEntity2 = fetchBookingInNewTransaction(testBookingId);
 
 
         updateBookingInNewTransaction(bookingEntity1, "테스트1");

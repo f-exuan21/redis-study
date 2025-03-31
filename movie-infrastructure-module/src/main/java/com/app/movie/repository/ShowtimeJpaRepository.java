@@ -14,7 +14,7 @@ import java.util.Set;
 
 public interface ShowtimeJpaRepository extends JpaRepository<ShowtimeEntity, Long> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ShowtimeEntity> findById(Long movieId);
     List<ShowtimeEntity> findByMovie_ReleaseDateLessThanEqual(LocalDate date);
 

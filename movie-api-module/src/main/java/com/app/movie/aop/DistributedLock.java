@@ -11,8 +11,8 @@ public @interface DistributedLock {
 
     String key() default "";
 
-    long waitTime() default 5;
+    long waitTime() default 0;
 
-    long leaseTime() default 30;
+    long leaseTime() default 2;
 
 }

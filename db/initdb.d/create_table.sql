@@ -73,3 +73,5 @@ CREATE TABLE theater
     updated_at datetime NULL,
     CONSTRAINT pk_theater PRIMARY KEY (id)
 );
+
+ALTER TABLE booking ADD CONSTRAINT uq_showtime_seat UNIQUE (showtime_id, seat_id);

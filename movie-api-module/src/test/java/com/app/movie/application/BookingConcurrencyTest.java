@@ -27,7 +27,7 @@ public class BookingConcurrencyTest {
     @Autowired
     private BookingRepository bookingRepository;
 
-    private Long testShowtimeId = 1L;
+    private Long testShowtimeId = 11L;
     private List<Long> testSeatId = Arrays.asList(1L, 2L, 3L);
 
     @Test
@@ -49,7 +49,7 @@ public class BookingConcurrencyTest {
             });
         }
 
-        latch.await(); // 모든 스레드 작업 대기
+        latch.await();
         executor.shutdown();
 
         for (Long seatId : testSeatId) {

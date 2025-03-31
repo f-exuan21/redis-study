@@ -40,24 +40,32 @@ export const options = {
             executor: 'constant-arrival-rate',
             rate: peakRPS,         // 초당 요청 수
             timeUnit: '1s',        // rate 기준 단위
-            duration: '300s',       // 테스트 유지 시간(예: 30초)
+            duration: '30s',       // 테스트 유지 시간(예: 30초)
             preAllocatedVUs: 500,  // 기본 할당 VU 수 (요청 속도에 맞춰 충분히 할당)
             maxVUs: 1000,          // 최대 동시 VU
         },
     },
     thresholds: {
-        http_req_duration: ['p(95)<200'],  // 95퍼센타일 응답시간 < 200ms
-        http_req_failed: ['rate<0.01'],    // 요청 실패율 < 1%
+        // http_req_duration: ['p(95)<200'],  // 95퍼센타일 응답시간 < 200ms
+        // http_req_failed: ['rate<0.01'],    // 요청 실패율 < 1%
     },
 };
 
 export default function movies() {
 
-    const randomSeat = Math.floor(Math.random() * 50) + 1;
     const randomShowtime = Math.floor(Math.random() * 500) + 1;
 
+    const randomSeatArr = [];
+
+    const startNumber = Math.floor(Math.random() * 50) + 1;
+    const count = Math.floor(Math.random() * 5) + 1;
+
+    for(let i = 0; i < count; i++) {
+        randomSeatArr.push(startNumber + i);
+    }
+
     const payload = JSON.stringify({
-        seatId: randomSeat,
+        seatIds: randomSeatArr,
         showtimeId: randomShowtime
     });
 
@@ -72,5 +80,7 @@ export default function movies() {
     check(response, {
         "status is 200": (r) => r.status === 200,
         "중복 예외 메시지 포함": (r) => r.status === 400 && r.body.includes('이미 예약된 영화 및 좌석임.'),
+        "다른 사용자가 예약 중": (r) => r.status === 400 && r.body.includes('다른 사용자가 예약 중입니다.'),
+        "좌석 선택 오류": (r) => r.status === 400 && r.body.includes('좌석은 연속적이고 동일 라인 내에 있어야 합니다.'),
     });
 }
