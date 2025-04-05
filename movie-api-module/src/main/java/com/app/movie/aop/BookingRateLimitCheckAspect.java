@@ -1,5 +1,6 @@
 package com.app.movie.aop;
 
+import com.app.movie.application.RateLimiterRedisService;
 import com.app.movie.presentation.BookingFrequencyLimitException;
 import com.app.movie.presentation.dto.BookingRequestDto;
 import com.google.common.cache.Cache;
@@ -16,27 +17,19 @@ import java.util.concurrent.TimeUnit;
 public class BookingRateLimitCheckAspect {
 
     private final HttpServletRequest request;
+    private final RateLimiterRedisService rateLimiterRedisService;
 
-    private final Cache<String, Boolean> bookingAttemptsCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(5, TimeUnit.MINUTES)
-            .build();
-
-    public BookingRateLimitCheckAspect(HttpServletRequest request) {
+    public BookingRateLimitCheckAspect(HttpServletRequest request, RateLimiterRedisService rateLimiterRedisService) {
         this.request = request;
+        this.rateLimiterRedisService = rateLimiterRedisService;
     }
 
     @Before("@annotation(BookingRateLimitCheck) && args(bookingRequestDto,..)")
     public void checkBookingRateLimit(BookingRequestDto bookingRequestDto) {
 
         String clientIp = HttpHeaders.getClientIp(request);
-        Long showtimeId = bookingRequestDto.showtimeId();
-        String key = clientIp + ":" + showtimeId;
-
-        if (bookingAttemptsCache.getIfPresent(key) != null) {
-            throw new BookingFrequencyLimitException();
-        }
-
-        bookingAttemptsCache.put(key, Boolean.TRUE);
+        String key = "booking_limit:" + clientIp + ":" + bookingRequestDto.showtimeId();
+        rateLimiterRedisService.setIfAbsent(key, 300);
 
     }
 
