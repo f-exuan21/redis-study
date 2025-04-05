@@ -1,5 +1,6 @@
 package com.app.movie.presentation;
 
+import com.app.movie.aop.BookingRateLimitCheck;
 import com.app.movie.application.BookingService;
 import com.app.movie.presentation.dto.BookingRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class BookingRestController {
     }
 
     @PostMapping("/book")
+    @BookingRateLimitCheck
     public ResponseEntity<Void> bookMovie(@RequestBody BookingRequestDto bookingRequestDto) {
         bookingService.bookShowtimeAndSendFcm(bookingRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

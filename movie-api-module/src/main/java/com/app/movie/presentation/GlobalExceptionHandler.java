@@ -42,4 +42,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleTooManyRequestException(TooManyRequestException e) {
         return new ResponseEntity<>("요청이 너무 많아 IP가 차단되었습니다. 나중에 다시 시도해주세요.", HttpStatus.TOO_MANY_REQUESTS);
     }
+
+    @ExceptionHandler(BookingFrequencyLimitException.class)
+    public ResponseEntity<String> handleBookingFrequencyLimitException(BookingFrequencyLimitException e) {
+        return new ResponseEntity<>("같은 시간대의 동일 영화는 5분에 1번씩만 예약할 수 있습니다.", HttpStatus.TOO_MANY_REQUESTS);
+    }
 }

@@ -30,18 +30,9 @@ public class RateLimitAspect {
         this.request = request;
     }
 
-    private String getClientIpAddress() {
-        String ipAddress = request.getHeader("X-Forwarded-For");
-        if(ipAddress == null || ipAddress.isEmpty()) {
-            return "";
-        }
-
-        return ipAddress.split(",")[0];
-    }
-
     @Before("@annotation(RateLimitCheck)")
     public void rateLimitCheck() {
-        String clientIp = this.getClientIpAddress();
+        String clientIp = HttpHeaders.getClientIp(request);
 
         if (blockedIpAddress.getIfPresent(clientIp) != null) {
             throw new TooManyRequestException();
