@@ -37,4 +37,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidSeatSelectionException(InvalidSeatSelectionException e) {
         return new ResponseEntity<>("좌석은 연속적이고 동일 라인 내에 있어야 합니다.", HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(TooManyRequestException.class)
+    public ResponseEntity<String> handleTooManyRequestException(TooManyRequestException e) {
+        return new ResponseEntity<>("요청이 너무 많아 IP가 차단되었습니다. 나중에 다시 시도해주세요.", HttpStatus.TOO_MANY_REQUESTS);
+    }
 }

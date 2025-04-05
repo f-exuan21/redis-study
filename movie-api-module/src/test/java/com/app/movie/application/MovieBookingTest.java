@@ -60,6 +60,7 @@ class MovieBookingTest {
                     failureCount.incrementAndGet();
                 } catch (Exception e) {
                     System.out.println("기타 에러: " + e.getMessage());
+                    failureCount.incrementAndGet();
                 } finally {
                     latch.countDown();
                 }
