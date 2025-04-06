@@ -21,11 +21,9 @@ public class Booking {
     }
 
     public static Booking book(Long showtimeId, Long seatId) {
-        Showtime showtime = new Showtime();
-        showtime.setId(showtimeId);
+        Showtime showtime = new Showtime(showtimeId);
 
-        Seat seat = new Seat();
-        seat.setId(seatId);
+        Seat seat = new Seat(seatId);
 
         Booking booking = new Booking(showtime, seat);
         return booking;

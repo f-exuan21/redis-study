@@ -1,21 +1,17 @@
 package com.app.movie.application;
 
-import com.app.movie.aop.DistributedLock;
 import com.app.movie.model.Movie;
 import com.app.movie.model.Showtime;
 import com.app.movie.model.Theater;
 import com.app.movie.presentation.dto.MovieRequestDto;
 import com.app.movie.presentation.dto.MovieResponseDto;
 import com.app.movie.presentation.dto.TheaterShowtime;
-import com.app.movie.repository.MovieRepository;
 import com.app.movie.repository.ShowtimeRepository;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,10 +72,10 @@ public class MovieService {
                                     movie.getRating().getDescription(),
                                     movie.getDuration(),
                                     movie.getGenre().getName(),
-                                    movie.getReleaseDate()
+                                    movie.getReleaseDate(),
+                                    theaterShowtime
                             );
 
-                            dto.setTheaterShowtimes(theaterShowtime);
                             return dto;
                         }
                 )

@@ -57,17 +57,19 @@ class MovieServiceTest {
         movie.setReleaseDate(LocalDate.of(2023, 1, 1)); // 오늘 포함 이전 날짜
 
         // Showtime 데이터 - 하나의 영화에 대해 두 개의 상영시간
-        Showtime showtime1 = new Showtime();
-        showtime1.setId(10L);
-        showtime1.setTheater(theater);
-        showtime1.setMovie(movie);
-        showtime1.setStartTime(LocalTime.of(14, 0));
+        Showtime showtime1 = new Showtime(
+                10L,
+                theater,
+                movie,
+                LocalTime.of(14, 0)
+        );
 
-        Showtime showtime2 = new Showtime();
-        showtime2.setId(11L);
-        showtime2.setTheater(theater);
-        showtime2.setMovie(movie);
-        showtime2.setStartTime(LocalTime.of(16, 0));
+        Showtime showtime2 = new Showtime(
+                11L,
+                theater,
+                movie,
+                LocalTime.of(16, 0)
+        );
 
         List<Showtime> showtimes = Arrays.asList(showtime1, showtime2);
         LocalDate today = LocalDate.now();

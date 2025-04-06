@@ -1,13 +1,16 @@
 package com.app.movie.entity;
 
 
+import com.app.movie.mapper.SeatMapper;
+import com.app.movie.mapper.ShowtimeMapper;
 import com.app.movie.model.Booking;
-import com.app.movie.model.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -15,7 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Booking")
 @Getter
-@Setter
 public class BookingEntity {
 
     @Id
@@ -31,39 +33,49 @@ public class BookingEntity {
     private SeatEntity seat;
 
     private String createdBy;
+
+    @CreatedDate
     private LocalDateTime createdAt;
+
     private String updatedBy;
+
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Version
     private Long version;
 
-    public SeatEntity getSeat() {
-        return seat;
+    public BookingEntity(Long id) {
+        this.id = id;
     }
 
-    public void setSeat(SeatEntity seat) {
-        this.seat = seat;
-    }
-
-    public ShowtimeEntity getShowtime() {
-        return showtime;
-    }
-
-    public void setShowtime(ShowtimeEntity showtime) {
+    public BookingEntity(ShowtimeEntity showtime, SeatEntity seat, String createdBy) {
         this.showtime = showtime;
+        this.seat = seat;
+        this.createdBy = createdBy;
     }
+
 
     public static BookingEntity of(Booking booking) {
         ShowtimeEntity showtimeEntity = new ShowtimeEntity(booking.getShowtime().getId());
         SeatEntity seatEntity = new SeatEntity(booking.getSeat().getId());
 
-        BookingEntity bookingEntity = new BookingEntity();
-        bookingEntity.setId(bookingEntity.getId());
-        bookingEntity.setSeat(seatEntity);
-        bookingEntity.setShowtime(showtimeEntity);
-        bookingEntity.setCreatedBy("tester");
+        BookingEntity bookingEntity = new BookingEntity(
+                showtimeEntity,
+                seatEntity,
+                "tester"
+        );
+
         return bookingEntity;
+    }
+
+    public Booking toBooking() {
+        Booking booking = new Booking(
+                id,
+                ShowtimeMapper.toDomain(showtime),
+                SeatMapper.toDomain(seat)
+        );
+        return booking;
     }
 
 

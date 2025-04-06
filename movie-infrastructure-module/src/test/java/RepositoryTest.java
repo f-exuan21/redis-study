@@ -2,6 +2,7 @@ import com.app.movie.MovieApplication;
 import com.app.movie.entity.BookingEntity;
 import com.app.movie.entity.SeatEntity;
 import com.app.movie.entity.ShowtimeEntity;
+import com.app.movie.model.Showtime;
 import com.app.movie.repository.BookingJpaRepository;
 import com.app.movie.repository.BookingRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -23,10 +24,16 @@ public class RepositoryTest {
 
     @Transactional
     public Long createTestBooking() {
-        BookingEntity booking = new BookingEntity();
-        booking.setSeat(new SeatEntity(10L));
-        booking.setShowtime(new ShowtimeEntity(1L));
-        booking.setUpdatedBy("USER");
+
+        SeatEntity seat = new SeatEntity(10L);
+        ShowtimeEntity showtime = new ShowtimeEntity(1L);
+
+        BookingEntity booking = new BookingEntity(
+                showtime,
+                seat,
+                "tester"
+        );
+
         return bookingRepository.saveAndFlush(booking).getId();
     }
 

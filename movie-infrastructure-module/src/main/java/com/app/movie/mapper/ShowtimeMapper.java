@@ -13,28 +13,26 @@ import java.time.LocalDateTime;
 public class ShowtimeMapper {
 
     // 변환 메서드: Entity -> Domain
-    public static Showtime convertToDomain(ShowtimeEntity showtimeEntity) {
+    public static Showtime toDomain(ShowtimeEntity showtimeEntity) {
         Theater theater = TheaterMapper.convertToDomain(showtimeEntity.getTheater());
         Movie movie = MovieMapper.convertToDomain(showtimeEntity.getMovie());
         return new Showtime(
                 showtimeEntity.getId(),
                 theater,
                 movie,
-                showtimeEntity.getStartTime(),
-                showtimeEntity.getEndTime()
+                showtimeEntity.getStartTime()
         );
     }
 
-    public static Showtime convertToDomainWithoutTheaterAndMovie(ShowtimeEntity showtimeEntity) {
+    public static Showtime toDomainWithoutTheaterAndMovie(ShowtimeEntity showtimeEntity) {
         return new Showtime(showtimeEntity.getId(),
                 null,
                 null,
-                showtimeEntity.getStartTime(),
-                showtimeEntity.getEndTime());
+                showtimeEntity.getStartTime());
     }
 
     // 변환 메서드: Domain -> Entity
-    public static ShowtimeEntity convertToEntity(Showtime showtime) {
+    public static ShowtimeEntity toEntity(Showtime showtime) {
         LocalDateTime today = LocalDateTime.now();
         String adminName = "admin";
 

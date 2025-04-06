@@ -1,15 +1,18 @@
 package com.app.movie.application;
 
 import com.app.movie.MovieApplication;
+import com.app.movie.model.Booking;
 import com.app.movie.model.Seat;
 import com.app.movie.model.Showtime;
 import com.app.movie.presentation.dto.BookingRequestDto;
 import com.app.movie.repository.BookingRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +32,14 @@ public class BookingConcurrencyTest {
 
     private Long testShowtimeId = 11L;
     private List<Long> testSeatId = Arrays.asList(1L, 2L, 3L);
+
+    @AfterEach
+    void cleanUp() {
+        for (Long seatId : testSeatId) {
+            Booking booking = bookingRepository.findByShowtimeIdAndSeatId(testShowtimeId, seatId);
+            bookingRepository.delete(booking);
+        }
+    }
 
     @Test
     void 동시에_같은_좌석_예약시_하나만_성공해야_한다() throws InterruptedException {
