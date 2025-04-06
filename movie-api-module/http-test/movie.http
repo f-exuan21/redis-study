@@ -1,2 +1,2 @@
 ## 영화 상영 목록 조회
-GET http://localhost:8080/movie?title=&genres=드라마&genres=추리
+GET http://localhost:8080/movie?title=&genres=드라마

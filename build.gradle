@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version "3.4.3"
+    id 'jacoco'
 }
 
 group = 'com.app'
@@ -29,6 +30,49 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.18.26'
         annotationProcessor 'org.projectlombok:lombok:1.18.26'
     }
+
+    apply plugin: 'jacoco'
+
+    jacoco {
+        toolVersion = "0.8.13"
+    }
+
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+
+    jacocoTestReport {
+        dependsOn test
+
+        reports {
+            html.required.set(true)
+            xml.required.set(true)
+            csv.required.set(true)
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0.80
+                }
+            }
+        }
+    }
+}
+
+task jacocoRootReport(type: JacocoReport) {
+    dependsOn subprojects.test
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+    subprojects.each { subproject ->
+        sourceSets subproject.sourceSets.main
+    }
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
 }
 
 bootJar {
@@ -41,6 +85,7 @@ jar {
 
 test {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
 }
 
 project(':movie-infrastructure-module') {

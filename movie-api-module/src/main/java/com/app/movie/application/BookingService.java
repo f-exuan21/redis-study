@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookingService {
 
-
     private final MessageSender messageSender;
     private final BookingTransactionalService bookingTransactionalService;
 

@@ -1,5 +1,6 @@
 package com.app.movie.application;
 
+import com.app.movie.model.Booking;
 import com.app.movie.presentation.InvalidSeatSelectionException;
 import com.app.movie.presentation.SeatNotFoundException;
 import com.app.movie.presentation.ShowtimeNotFoundException;
@@ -31,7 +32,7 @@ public class BookingTransactionalService {
     @Transactional
     public void bookShowtime(BookingRequestDto bookingRequestDto){
 
-        if(!bookingRequestDto.isValidSeats()) {
+        if(!Booking.isValidSeats(bookingRequestDto.seatIds())) {
             throw new InvalidSeatSelectionException();
         }
 
