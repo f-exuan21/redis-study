@@ -22,7 +22,7 @@ public class RateLimitAspect {
 
     @Before("@annotation(RateLimitCheck)")
     public void rateLimitCheck() {
-        String clientIp = HttpHeaders.getClientIp(request);
+        String clientIp = ClientIpHolder.getClientIp();
         String key = "rate_limit:" + clientIp;
         long current = rateLimiterRedisService.incrementAndGet(key, 60);
         if (current > 50) {

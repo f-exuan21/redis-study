@@ -24,7 +24,7 @@ public record BookingRequestDto(Long showtimeId, List<Long> seatIds) {
         }
 
         long firstSeatId = seatIds.get(0);
-        long blockStart = firstSeatId / 5 * 5 + 1;
+        long blockStart = firstSeatId / 6 * 5 + 1;
         long blockEnd = blockStart + 4;
 
         for(long seat : seatIds) {

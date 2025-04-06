@@ -4,5 +4,5 @@ Content-Type: application/json
 
 {
   "showtimeId": 1,
-  "seatIds": [5]
+  "seatIds": [5, 7]
 }
