@@ -1,6 +1,5 @@
 package com.app.movie.filter;
 
-import com.app.movie.aop.ClientIpHolder;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;

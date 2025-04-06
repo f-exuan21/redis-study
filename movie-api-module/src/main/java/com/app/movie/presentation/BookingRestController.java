@@ -1,6 +1,6 @@
 package com.app.movie.presentation;
 
-import com.app.movie.aop.ClientIpHolder;
+import com.app.movie.filter.ClientIpHolder;
 import com.app.movie.application.BookingService;
 import com.app.movie.application.RateLimiterRedisService;
 import com.app.movie.presentation.dto.BookingRequestDto;
